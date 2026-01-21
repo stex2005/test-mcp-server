@@ -1,0 +1,16 @@
+[project]
+name = "dummy-mcp"
+version = "0.1.0"
+description = "Dummy MCP server for testing submodule integration"
+requires-python = ">=3.10"
+
+dependencies = [
+    "fastmcp>=2.11.3",
+]
+
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["dummy_mcp", "dummy_mcp.tools", "dummy_mcp.resources", "dummy_mcp.prompts"]
