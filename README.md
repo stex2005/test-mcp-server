@@ -1,4 +1,4 @@
-# Dummy MCP Server
+# Test MCP Server
 
 A minimal Model Context Protocol (MCP) server for testing submodule integration with robotmcp_server.
 
@@ -13,7 +13,7 @@ A minimal Model Context Protocol (MCP) server for testing submodule integration 
 ```
 test-mcp-server/
 ├── pyproject.toml              # Package metadata
-└── dummy_mcp/
+└── test_mcp/
     ├── __init__.py             # Package init
     ├── integration.py          # Entry point for robotmcp_server
     ├── tools/
@@ -42,7 +42,7 @@ git submodule add https://github.com/robotmcp/test-mcp-server.git
 git submodule update --init --recursive
 ```
 
-The server automatically discovers and registers tools via `dummy_mcp/integration.py`.
+The server automatically discovers and registers tools via `test_mcp/integration.py`.
 
 ## Standalone Usage
 
@@ -52,7 +52,7 @@ pip install -e .
 
 ```python
 from fastmcp import FastMCP
-from dummy_mcp.integration import register
+from test_mcp.integration import register
 
 mcp = FastMCP("test-server")
 register(mcp)
@@ -64,10 +64,10 @@ The `integration.py` module provides the `register(mcp, **kwargs)` function call
 
 ```python
 from fastmcp import FastMCP
-from dummy_mcp.integration import register
+from test_mcp.integration import register
 
 def register(mcp: FastMCP, **kwargs) -> None:
-    """Register all dummy MCP tools, resources, and prompts."""
+    """Register all test MCP tools, resources, and prompts."""
     register_all_tools(mcp)
     register_all_resources(mcp)
     register_all_prompts(mcp)

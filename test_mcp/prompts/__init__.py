@@ -1,13 +1,13 @@
-"""Dummy MCP Prompts."""
+"""Test MCP Prompts."""
 
 from fastmcp import FastMCP
 
 
 def register_all_prompts(mcp: FastMCP, **kwargs) -> None:
-    """Register all dummy prompts with the MCP server."""
+    """Register all test prompts with the MCP server."""
 
-    @mcp.prompt(description="A dummy prompt for testing submodule integration.")
-    def dummy_greeting(name: str = "User") -> str:
+    @mcp.prompt(description="A test prompt for testing submodule integration.")
+    def test_greeting(name: str = "User") -> str:
         """Generate a greeting message.
 
         Args:
