@@ -13,6 +13,8 @@ A minimal Model Context Protocol (MCP) server for testing submodule integration 
 ```
 test-mcp-server/
 ├── pyproject.toml              # Package metadata
+├── README.md                   # This file
+├── .gitignore                  # Git ignore patterns
 └── test_mcp/
     ├── __init__.py             # Package init
     ├── integration.py          # Entry point for robotmcp_server
@@ -32,23 +34,58 @@ test-mcp-server/
 | `ping` | None | Returns `{"message": "pong"}` - tests connectivity |
 | `greet` | `name: str` | Returns `{"message": "Hello, {name}!"}` |
 
-## Usage with robotmcp_server
+## Installation
 
-Add as a git submodule:
+### Via robotmcp-server CLI (Recommended)
 
 ```bash
-cd robotmcp_server
-git submodule add https://github.com/robotmcp/test-mcp-server.git
-git submodule update --init --recursive
+robotmcp-server add https://github.com/robotmcp/test-mcp-server.git
 ```
 
-The server automatically discovers and registers tools via `test_mcp/integration.py`.
+This automatically:
+- Clones the repository as a git submodule
+- Installs dependencies from `pyproject.toml`
+- Registers tools via `test_mcp/integration.py`
 
-## Standalone Usage
+To verify installation:
 
 ```bash
+robotmcp-server list        # Show installed modules
+robotmcp-server list-tools  # Show available tools
+```
+
+To remove:
+
+```bash
+robotmcp-server remove test-mcp-server
+```
+
+### Standalone Installation
+
+```bash
+git clone https://github.com/robotmcp/test-mcp-server.git
+cd test-mcp-server
 pip install -e .
 ```
+
+## Usage
+
+### With robotmcp-server
+
+Once installed, tools are automatically registered. Verify with:
+
+```bash
+robotmcp-server list-tools
+```
+
+Expected output:
+```
+test_mcp:
+  - ping: Simple ping tool to test connectivity.
+  - greet: Greet a person by name.
+```
+
+### Standalone
 
 ```python
 from fastmcp import FastMCP
@@ -63,14 +100,48 @@ register(mcp)
 The `integration.py` module provides the `register(mcp, **kwargs)` function called by robotmcp_server's submodule auto-discovery:
 
 ```python
-from fastmcp import FastMCP
-from test_mcp.integration import register
-
+# test_mcp/integration.py
 def register(mcp: FastMCP, **kwargs) -> None:
     """Register all test MCP tools, resources, and prompts."""
     register_all_tools(mcp)
     register_all_resources(mcp)
     register_all_prompts(mcp)
+```
+
+This pattern allows robotmcp_server to dynamically load and register components from submodules.
+
+## Development
+
+### Requirements
+
+- Python >= 3.10
+- fastmcp >= 2.11.3
+
+### Setup
+
+```bash
+# Clone the repository
+git clone https://github.com/robotmcp/test-mcp-server.git
+cd test-mcp-server
+
+# Install in development mode
+pip install -e .
+```
+
+### Adding New Tools
+
+1. Add tool functions to `test_mcp/tools/tools.py`
+2. Use the `@mcp.tool()` decorator to register them
+3. Test with `robotmcp-server list-tools`
+
+### Testing with robotmcp-server
+
+For local development, you can add directly from a local path:
+
+```bash
+# From the robotmcp_server directory
+git submodule add ../path/to/test-mcp-server
+robotmcp-server list-tools
 ```
 
 ## License
